@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aplikasi Pencarian Bakat Renang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #cbefff, #ffffff);
+      color: #111;
+      text-align: center;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #c5ecfd18;
+      backdrop-filter: blur(10px);
+      padding: 10px 30px;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #005f99;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    .content {
+      display: inline-block;
+      background: #c5ecfd;
+      border-radius: 10px;
+      padding: 25px 35px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      text-align: left;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    input[type="int"] {
+            width: 200px;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #81d4fa;
+            font-size: 16px;
+        }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .buttons button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #c5ecfd;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .buttons button:hover {
+      background-color: #9edefa;
+      transform: scale(1.05);
+    }
+
+    .logo img {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .result-box {
+      margin-bottom: 20px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .result-box strong {
+      color: #004d73;
+      font-weight: 600;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #005f99;
+      text-align: center;
+    }
+
+    .tabel-tetangga {
+      width: 100%;
+      border: 2px solid #0077b6;
+      border-collapse: collapse;
+      font-size: 15px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .tabel-tetangga tr {
+      border: 1px solid #0077b6;
+      padding: 10px 14px;
+      text-transform: uppercase;
+    }
+    
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Aplikasi" />
+    </div>
+    <div class="menu">
+      <a href="{{ url_for('home') }}">Beranda</a>
+      <a href="{{ url_for('klasifikasi') }}">Klasifikasi</a>
+      <a href="{{ url_for('evaluasi') }}">Evaluasi</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h1>HASIL KLASIFIKASI</h1>
+    
+    <div class="card">
+    <div class="result-box"> 
+        <p>Nama : {{ nama }}</p>
+        <p>Jenis Kelamin : <strong>{{ jk }}</strong></p>
+        <p>Potensi Bakat Renang : {{ hasil }}</p>
+    </div>
+
+    <p>Jarak Terdekat  :</p>
+    <table class="tabel-tetangga">
+        {% for item in tetangga %}
+        <tr>
+          <td>Data {{ loop.index }}</td>
+          <td>{{ item['POTENSI'] }}</td>
+          <td>{{ item['JARAK'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</body>
+</html>

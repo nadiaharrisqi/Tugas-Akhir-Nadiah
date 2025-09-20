@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aplikasi Pencarian Bakat Renang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #cbefff, #ffffff);
+      color: #111;
+      text-align: center;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #c5ecfd18;
+      backdrop-filter: blur(10px);
+      padding: 10px 30px;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+      .logo img {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #005f99;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #444;
+      margin-bottom: 40px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .buttons button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #c5ecfd;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .buttons button:hover {
+      background-color: #9edefa;
+      transform: scale(1.05);
+    }
+    
+   .content {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .right, .left {
+      flex: 1;
+      font-size: 15px;
+    }
+
+    .right {
+      padding-right: 40px;
+      text-align: left;
+    }
+
+    .left {
+      padding-left: 40px;
+      text-align: left;
+    }
+
+    /* Table style seperti gambar */
+    table {
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 6px 12px;
+      text-align: center;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    .confusion-matrix td:first-child,
+    .confusion-matrix th:first-child {
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Aplikasi" />
+    </div>
+    <div class="menu">
+      <a href="{{ url_for('home') }}">Beranda</a>
+      <a href="{{ url_for('klasifikasi') }}">Klasifikasi</a>
+      <a href="{{ url_for('evaluasi') }}">Evaluasi</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h1>HASIL EVALUASI</h1>
+    <div class="container">
+    <div class="right">
+    <p>Nilai K : {{ hasil.k }}</p>
+    <p>Jumlah K-Fold : {{ hasil.cv }}</p>
+    <h3>Hasil Akurasi Tiap Fold :</h3>
+    <ol>
+      {% for score in hasil.scores_per_fold %}
+        <ul>Fold Ke-{{ loop.index  }} : {{ score }}%</ul>
+      {% endfor %}
+    </ol><br><br>
+
+    <p>Rata-rata Akurasi : {{ hasil.accuracy }}%</p>
+    <p>Rata-rata Presisi : {{ hasil.precision }}%</p>
+    <p>Rata-rata Recall : {{ hasil.recall }}%</p>
+    <p>Rata-rata F1-Score : {{ hasil.f1 }}%</p>
+    <p>Rata-rata AUC : {{ hasil.auc }}%</p><br>
+    </div>
+    
+    <div class="left">
+    <p>Confusion Matrix : </p>
+    <table>
+        <tr>
+            <td></td>
+            <td>Positif</td>
+            <td>Negatif</td>
+        </tr>
+        <tr>
+            <td>Positif</td>
+            <td>{{ hasil.confusion_matrix[0][0] }}</td>
+            <td>{{ hasil.confusion_matrix[0][1] }}</td>
+        </tr>
+        <tr>
+            <td>Negatif</td>
+            <td>{{ hasil.confusion_matrix[1][0] }}</td>
+            <td>{{ hasil.confusion_matrix[1][1] }}</td>
+        </tr>
+    </table><br><br>
+
+    <p>Classification Report : <p>
+
+    {% set label_map = {'0': 'Jarak Jauh', '1': 'Jarak Pendek'} %}
+
+    <table>
+      <tr>
+        <th>Label</th>
+        <th>Precision</th>
+        <th>Recall</th>
+        <th>F1-Score</th>
+        <th>Support</th>
+      </tr>
+      {% for label, metrics in hasil.report_dict.items() %}
+        {% if label != 'accuracy' and label != 'macro avg' and label != 'weighted avg' %}
+        <tr>
+          <td>{{ label_map[label] if label in label_map else label }}</td>
+          <td>{{ (metrics.precision * 100) | round(2) }}%</td>
+          <td>{{ (metrics.recall * 100) | round(2) }}%</td>
+          <td>{{ (metrics['f1-score'] * 100) | round(2) }}%</td>
+          <td>{{ metrics.support }}</td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+    </table> <br>
+    </div>
+   </div>
+  </div>
+</body>
+</html>

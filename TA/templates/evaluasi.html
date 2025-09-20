@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aplikasi Pencarian Bakat Renang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+   /* Reset dan font */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(to bottom, #cbefff, #ffffff);
+    color: #111;
+    min-height: 100vh;
+  }
+
+  /* Navbar */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(197, 236, 253, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 10px 30px;
+  }
+
+  .logo img {
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .menu {
+    display: flex;
+    gap: 20px;
+  }
+
+  .menu a {
+    text-decoration: none;
+    color: #005f99;
+    font-weight: 500;
+    transition: 0.3s;
+  }
+
+  .menu a:hover {
+    text-decoration: underline;
+  }
+
+  /* Konten */
+  .content {
+    margin-top: 80px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 40px;
+  }
+
+  /* Form */
+  form {
+    display: inline-block;
+    text-align: left;
+  }
+
+  label {
+    display: inline-block;
+    width: 140px;
+    font-weight: 500;
+  }
+
+  input[type="int"] {
+    width: 240px;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border-radius: 5px;
+    border: 1px solid #c5ecfd;
+    background-color: #c5ecfd;
+    font-size: 16px;
+  }
+
+  /* Tombol */
+  .buttons {
+    text-align: center;
+  }
+
+  .buttons button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    background-color: #c5ecfd;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  .buttons button:hover {
+    background-color: #9edefa;
+    transform: scale(1.05);
+  }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Aplikasi" />
+    </div>
+    <div class="menu">
+      <a href="{{ url_for('home') }}">Beranda</a>
+      <a href="{{ url_for('klasifikasi') }}">Klasifikasi</a>
+      <a href="{{ url_for('evaluasi') }}">Evaluasi</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h1>MODEL ALGORITMA KNN</h1>
+    
+    <form action="/evaluasi" method="post">
+        <label for="nilaiK">Nilai K </label>
+        <input type="int" id="nilaiK" name="nilaiK"><br>
+
+        <label for="KFold">Nilai K-Fold  </label>
+        <input type="int" id="KFold" name="KFold"><br><br>
+
+        <div class="buttons">
+          <button type="submit">Evaluasi</button>
+        </div>
+    </form>
+
+  </div>
+</body>
+</html>
